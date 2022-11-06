@@ -33,6 +33,25 @@ const queries = {
                 ON users.id = logins.user_id
                   WHERE token = "${token}";`;
   },
+  deleteUser: (token) => {
+    return `DELETE users, logins FROM users
+                JOIN logins
+                  ON users.id = logins.user_id
+                    WHERE token = "${token}";`;
+  },
+  updateUser: (token, updateArray) => {
+    let setString = "";
+    updateArray.map((key, i) => {
+      setString += `${Object.keys(key)} = "${key[Object.keys(key)]}" ${
+        updateArray.length != i + 1 ? ", " : ""
+      }`;
+    });
+    return `UPDATE users
+                JOIN logins
+                  ON users.id = logins.user_id
+                  SET ${setString}
+                      WHERE token = "${token}";`;
+  },
 };
 
 module.exports = queries;
